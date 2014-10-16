@@ -1,0 +1,27 @@
+.row
+  .col-lg-12
+    %ul.pagination
+      - if @data[:current_page] == 1
+        %li.disabled
+          = link_to raw('&laquo;'), '#'
+      - else
+        %li
+          = link_to raw('&laquo;'), search_items_path(keyword: @keyword, page: @data[:current_page] - 1)
+      - range = 1..@data[:total_pages]
+      - range.each do |num|
+        - if num == @data[:current_page]
+          %li.active
+            %a= num
+        - else
+          %li
+            = link_to num, search_items_path(keyword: @keyword, page: num)
+      - if @data[:current_page] == @data[:total_pages]
+        %li.disabled
+          = link_to raw('&raquo;'), '#'
+      - else
+        %li
+          = link_to raw('&raquo;'), search_items_path(keyword: @keyword, page: @data[:current_page] + 1)
+    - start_number = (@data[:current_page] - 1) * @data[:limit] + 1
+    - last_number = start_number + @data[:limit] - 1
+    - last_number = last_number > @data[:total_results] ? @data[:total_results] : last_number
+    %p 全#{@data[:total_results]}件中 #{start_number} - #{last_number}件を表示

@@ -1,0 +1,53 @@
+.row
+  .col-lg-12
+    .page-header
+      %h3 本の詳細
+    %h2= @book[:title]
+    .col-lg-5
+      = image_tag @book[:image]
+    .col-lg-6
+      %h4
+        %strong #{Item.where({:asin => @book[:asin]}).count}
+        人登録
+      - rank_list = Item.where({:asin => @book[:asin]}).pluck(:rank)
+      - unless rank_list.empty?
+        %h4
+          %strong #{(rank_list.inject{|sum, n| sum + n} / rank_list.size.to_f).round(2)}
+          評価
+      %h4
+        - reviews = Review.find_reviews_by_asin(@book[:asin])
+        %strong #{reviews.count}
+        レビュー
+      %p 著者:#{@book[:author]}
+      %p #{@book[:price]} / #{@book[:manufacturer]} / #{@book[:publication_date]}発売
+      = link_to 'Amazon詳細ページへ', @book[:page_url], :class => 'btn btn-primary'
+      %br
+      %br
+.row
+  .col-lg-12
+    .page-header
+      %h2 レビュー
+    .review
+      - reviews.each do |review|
+        - user = Bookshelf.find_user_by_id(review.item.bookshelf_id)
+        .row
+          .col-lg-1
+            - unless user.icon.blank?
+              = image_tag user.icon, size: '80'
+            - else
+              = image_tag 'prof_noimage_upload.gif', size: '80'
+          .col-lg-8
+            .panel.panel-default
+              .panel-heading
+                #{user.username}さんのレビュー
+                - if review.item.rank > 0
+                  .rank-icon
+                    - 5.times do |index|
+                      - if index < review.item.rank
+                        %i.fa.fa-star.orange
+                      - else
+                        %i.fa.fa-star-o
+              .panel-body
+                = review.body
+                %br
+                %p.date.text-muted= review.created_at.strftime("%Y年%m月%d日 %H時%M分%S秒")

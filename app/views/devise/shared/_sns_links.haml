@@ -1,0 +1,7 @@
+.row
+  .col-lg-12
+    .page-header
+      %h2 SNSアカウントログイン
+      = link_to "Facebook", omniauth_authorize_path(resource_name, 'facebook'), class: 'btn btn-info'
+      = link_to "Twitter", omniauth_authorize_path(resource_name, 'twitter'), class: 'btn btn-primary'
+      = link_to "GitHub", omniauth_authorize_path(resource_name, 'github'), class: 'btn btn-default'

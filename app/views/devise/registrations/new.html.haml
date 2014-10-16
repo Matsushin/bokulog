@@ -1,0 +1,20 @@
+= render 'devise/shared/sns_links'
+.row
+  .col-lg-6
+    .page-header
+      %h2 会員登録
+    .well
+      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: "form-horizontal"}) do |f|
+        - if f.error_notification
+          .alert.alert-danger
+            = f.error_notification
+          %br
+        .form-group
+          = create_input_form_for_username(f)
+        .form-group
+          = create_input_form_for_email(f)
+        .form-group
+          = create_input_form_for_password(f)
+        .form-group
+          .col-lg-10
+            = f.button :submit, '登録', :class => 'btn btn-primary'

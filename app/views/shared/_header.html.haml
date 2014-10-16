@@ -1,0 +1,14 @@
+.navbar.navbar-inverse.navbar-fixed-top
+  .container
+    .navbar-header
+      = link_to 'Bokulog', root_path, :class => 'navbar-brand'
+    .navbar-collapse.collapse
+      %ul.nav.navbar-nav
+        - if user_signed_in?
+          %li= link_to 'マイページ', users_path
+          %li= link_to '本棚', bookshelf_items_path
+          %li= #link_to '設定', edit_user_registration_path
+          %li= link_to 'ログアウト', destroy_user_session_path, method: :delete
+        - else
+          %li= link_to '会員登録', new_user_registration_path
+          %li= link_to 'ログイン', new_user_session_path

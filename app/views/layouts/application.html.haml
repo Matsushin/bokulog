@@ -1,0 +1,16 @@
+!!! 5
+%html
+  %head
+    %meta(charset="utf-8")
+    %title Bokulog
+    = stylesheet_link_tag    'application', media: 'screen', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    = yield(:page_stylesheet) if content_for?(:page_stylesheet)
+
+  %body
+    = render 'shared/header'
+    .container
+      .page-header
+        = yield
+      = render 'shared/footer'

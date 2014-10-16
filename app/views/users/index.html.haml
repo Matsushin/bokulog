@@ -1,0 +1,27 @@
+.row
+  = content_tag(:div, flash.notice, class: 'alert alert-success') if flash.notice
+  .col-lg-1
+    %h2
+      - if current_user.icon
+        = image_tag current_user.icon, size: '80'
+      - else
+        = image_tag 'prof_noimage_upload.gif', size: '80'
+  .col-lg-10
+    %h2
+      = current_user.username
+      さんのホーム
+    .lead
+      = current_user.username
+      さんの本棚の状態を確認できます。
+.row
+  .col-lg-8
+    .page-header
+      %h3
+        本の検索
+    = form_tag(search_items_path, :method => :get) do
+      .col-lg-6
+        = text_field_tag 'keyword', nil, class: 'form-control', placeholder: '本の検索', size: 20
+      = submit_tag '検索', class: 'btn btn-primary'
+    = render 'users/reading_status'
+  .col-lg-4
+    = render 'users/using_status'

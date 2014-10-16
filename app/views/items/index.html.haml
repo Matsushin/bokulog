@@ -1,0 +1,32 @@
+.row
+  = content_tag(:div, flash.notice, class: 'alert alert-success') if flash.notice
+  .col-lg-1
+    %h2
+      - if current_user.icon
+        = image_tag current_user.icon, size: '80'
+      - else
+        = image_tag 'prof_noimage_upload.gif', size: '80'
+  .col-lg-10
+    %h2
+      = current_user.username
+      さんの本棚
+.row
+  .col-lg-8
+    .page-header
+      %h3 本棚
+    #shelf
+      .shelf-wrapper
+        #shelf-inner
+          - @items.each_with_index do |item, index|
+            .item-wrapper
+              .item-area
+                .item-img-area
+                  = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+              - if item.rank > 0
+                .rank-icon
+                  - 5.times do |index|
+                    - if index < item.rank
+                      %i.fa.fa-star.orange
+                    - else
+                      %i.fa.fa-star-o
+      = paginate @items

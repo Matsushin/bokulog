@@ -1,0 +1,16 @@
+.panel.panel-default
+  .panel-heading
+    利用状況
+  %ul.list-group
+    %li.list-group-item
+      登録アイテム数
+      - saved_count = current_user.bookshelf.items.count
+      %span.badge= saved_count
+    %li.list-group-item
+      レビュー数
+      - reviewed_count = current_user.bookshelf.items.joins(:review).where("reviews.body <> ''").count
+      %span.badge= reviewed_count
+    %li.list-group-item
+      未レビュー数
+      - not_reviewed_count = saved_count - reviewed_count
+      %span.badge= not_reviewed_count

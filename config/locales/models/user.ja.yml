@@ -1,0 +1,21 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        username: ユーザ名
+        email: メールアドレス
+        password: パスワード
+    errors:
+      models:
+        user:
+          attributes:
+            username:
+              taken: が他のユーザと重複しています。
+              blank: ユーザ名が入力されていません。
+            email:
+              taken: が他のユーザと重複しています。
+              blank: メールアドレスが入力されていません。
+              invalid: メールアドレス形式で入力してください。
+            password:
+              blank: パスワードが入力されていません。
+              too_short: パスワードが短すぎます。8文字以上入力してください。
