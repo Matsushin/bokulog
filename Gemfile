@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+ruby '2.1.2'
 
 gem 'rails', '4.1.1'
 gem 'mysql2'
@@ -44,4 +45,8 @@ end
 
 group :doc do
   gem 'sdoc', '~> 0.4.0'
+end
+
+group :production do
+  gem 'rails_12factor'
 end
