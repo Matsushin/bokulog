@@ -4,6 +4,9 @@ Rails練習用ブクログコピーアプリ
 ## ボクログとは
 本を検索してレビュー、タグ、評価をつける等して自分の本棚を作り管理することができます。
 
+## URL
+http://bokulog.herokuapp.com/
+
 ## セットアップ時の注意点
 ##### 1.各種キー情報の取得
 - [Facebook Apps](https://developers.facebook.com/apps)
@@ -35,7 +38,7 @@ AWS_ACCESS_KEY_ID       = '[取得したAccess Key ID]'
 AWS_SECRET_KEY          = '[取得したSecret Access Key]'
 ````
 
-## 機能一覧　
+## 機能一覧
 ### 1.認証
 - 会員登録
 - ログイン
