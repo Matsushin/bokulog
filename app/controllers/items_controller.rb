@@ -2,14 +2,14 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: %i{index search show create edit update}
   before_action :set_item, only: %i{edit update}
   before_action :set_book, only: %i{show edit update}
+  before_action :set_bookshelf, only: %i{index search create}
 
   def index
-    @bookshelf = current_user.bookshelf
     @items = @bookshelf.items.order(created_at: :desc).page(params[:page])
   end
 
   def search
-    @data = Item.search_for_amazon(current_user.bookshelf.id, params[:keyword], params[:page] ? params[:page].to_i : 1)
+    @data = Item.search_for_amazon(@bookshelf.id, params[:keyword], params[:page] ? params[:page].to_i : 1)
     @keyword = params[:keyword]
   end
 
@@ -18,9 +18,8 @@ class ItemsController < ApplicationController
 
   def create
     if request.xhr?
-      bookshelf = current_user.bookshelf
-      bookshelf.items.build(book_paramas)
-      bookshelf.save!
+      @bookshelf.items.build(book_paramas)
+      @bookshelf.save!
       render:nothing => true
     end
   end
@@ -47,6 +46,10 @@ class ItemsController < ApplicationController
   def set_book
     asin =  params[:asin] ? params[:asin] : @item.asin
     @book = Item.search_for_amazon_by_asin(asin)
+  end
+
+  def set_bookshelf
+    @bookshelf = current_user.bookshelf
   end
 
   def item_params
