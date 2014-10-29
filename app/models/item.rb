@@ -15,13 +15,13 @@ class Item < ActiveRecord::Base
     self.where({:status => status}).order('created_at desc')
   end
 
-  def self.search_for_amazon(bookshelf_id, keyword, page = 1)
+  def self.search_for_amazon(keyword, page = 1)
     if page > 5
       page = 5
     end
 
-    retryable(tries: 5) do
-      res = Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
+    res = retryable(tries: 5) do
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
         :item_page => page, :country => 'jp'})
     end
 
@@ -36,14 +36,12 @@ class Item < ActiveRecord::Base
     res.items.each do |item|
       element = item.get_element('ItemAttributes')
       asin = item.get('ASIN')
-      registered = Item.where({:bookshelf_id => bookshelf_id, :asin => asin}).exists?
       book = {
         :asin             => asin,
         :title            => element.get('Title'),
         :author           => element.get_array('Author').join(', '),
         :publication_date => element.get('PublicationDate'),
         :price            => element.get('ListPrice/FormattedPrice'),
-        :registered       => registered,
         :small_image      => item.get('SmallImage/URL'),
         :medium_image     => item.get('MediumImage/URL'),
       }

@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
   end
 
   def search
-    @data = Item.search_for_amazon(@bookshelf.id, params[:keyword], params[:page] ? params[:page].to_i : 1)
+    @data = Item.search_for_amazon(params[:keyword], params[:page] ? params[:page].to_i : 1)
     @keyword = params[:keyword]
   end
 
