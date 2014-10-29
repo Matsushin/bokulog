@@ -19,16 +19,10 @@ class Item < ActiveRecord::Base
     if page > 5
       page = 5
     end
-    retry_count = 0
-    begin
+
+    retryable(tries: 5) do
       res = Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
         :item_page => page, :country => 'jp'})
-    rescue
-      if retry_count <= 5
-        retry_count + 1
-        retry
-      end
-      false
     end
 
     data = {
@@ -60,15 +54,8 @@ class Item < ActiveRecord::Base
   end
 
   def self.search_for_amazon_by_asin(asin)
-    retry_count = 0
-    begin
+    retryable(tries: 5) do
       res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
-    rescue
-      if retry_count <= 5
-        retry_count + 1
-        retry
-      end
-      false
     end
 
     book = {}

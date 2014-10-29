@@ -24,6 +24,7 @@ gem 'dotenv-rails'
 gem 'amazon-ecs'
 gem 'kaminari'
 gem 'font-awesome-sass'
+gem 'retryable'
 
 group :development do
   gem 'spring'
