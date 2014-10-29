@@ -3,23 +3,19 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i{edit update}
   before_action :set_book, only: %i{show edit update}
 
-  # 本棚本一覧
   def index
     @bookshelf = Bookshelf.where(:user_id => current_user.id).first
     @items = @bookshelf.items.order(created_at: :desc).page(params[:page])
   end
 
-  # 本検索結果
   def search
     @data = Item.search_for_amazon(current_user.bookshelf.id, params[:keyword], params[:page] ? params[:page].to_i : 1)
     @keyword = params[:keyword]
   end
 
-  # 商品詳細
   def show
   end
 
-  # 本棚登録
   def create
     if request.xhr?
       bookshelf = current_user.bookshelf
@@ -29,11 +25,9 @@ class ItemsController < ApplicationController
     end
   end
 
-  # 本棚の本編集
   def edit
   end
 
-  # 本棚の本更新
   def update
     if (@item.update(item_params))
       flash.notice = '更新しました'
