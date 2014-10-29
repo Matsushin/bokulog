@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {
-    :registrations      => 'users/registrations',
-    :sessions           => 'users/sessions',
-    :omniauth_callbacks => 'users/omniauth_callbacks'
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
   resources :users, only: [:index]
-  resource :bookshelf, only: [:index] do
+  resource :bookshelf, only: [] do
     resources :items, only: [:index, :create, :edit, :update]
   end
 
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     collection do
       get 'search'
     end
-end
+  end
 
   root 'home#index'
 end
