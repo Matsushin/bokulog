@@ -17,10 +17,11 @@ class ItemsController < ApplicationController
   end
 
   def create
-    if request.xhr?
-      @bookshelf.items.build(book_paramas)
-      @bookshelf.save!
-      render:nothing => true
+    @book = @bookshelf.items.build(book_paramas)
+    @book.save!
+
+    respond_to do |format|
+      format.js
     end
   end
 

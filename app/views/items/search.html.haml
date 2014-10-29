@@ -8,7 +8,7 @@
             %td
               %h4= link_to book[:title], item_path(book[:asin])
               #{book[:author]} / #{book[:publication_date]} / #{book[:price]}
-          %tr.active
+          %tr.active{id: "book_#{book[:asin]}"}
             %td
               .col-lg-3
                 = image_tag book[:medium_image]
