@@ -1,9 +1,5 @@
 .row
   = content_tag(:div, flash.notice, class: 'alert alert-success') if flash.notice
   .col-lg-12
-    - if user_signed_in?
-      = #render "signed_in"
-    - else
-      = #render "not_signed_in"
     %p.lead
       Bokulogは、新しい本と出会えるウェブ本棚コミュニティです。

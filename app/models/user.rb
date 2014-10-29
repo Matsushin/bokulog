@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   def self.find_or_create_by_oauth(auth)
-    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+    user = self.where(:provider => auth.provider, :uid => auth.uid).first
     unless user
-      user = User.create(self.build_oauth_user(auth))
+      user = self.create(self.build_oauth_user(auth))
     end
     user
   end
@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
         user_data[:icon]  = auth.info.image
       when "twitter" then
         user_data[:username]  = auth.info.nickname
-        user_data[:email] = User.create_unique_email
+        user_data[:email] = self.create_unique_email
         user_data[:icon]  = auth.info.image
       when "github" then
         user_data[:username]  = auth.extra.raw_info.name
@@ -45,6 +45,6 @@ class User < ActiveRecord::Base
   end
 
   def self.create_unique_email
-    User.create_unique_string + "@example.com"
+    self.create_unique_string + "@example.com"
   end
 end

@@ -6,8 +6,7 @@ class ItemsController < ApplicationController
   # 本棚本一覧
   def index
     @bookshelf = Bookshelf.where(:user_id => current_user.id).first
-    @items = @bookshelf.items.order(created_at: :desc)
-    @items = @items.page(params[:page])
+    @items = @bookshelf.items.order(created_at: :desc).page(params[:page])
   end
 
   # 本検索結果
@@ -44,6 +43,8 @@ class ItemsController < ApplicationController
       render :edit
     end
   end
+
+  private
 
   def set_item
     @item = Item.find(params[:id])

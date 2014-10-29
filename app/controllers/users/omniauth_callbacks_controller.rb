@@ -13,6 +13,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     connect_oauth_account
   end
 
+  private
+
   def set_user
     auth = request.env["omniauth.auth"]
     @user = User.find_or_create_by_oauth(auth)
