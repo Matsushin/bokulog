@@ -19,7 +19,6 @@ class Item < ActiveRecord::Base
     if page > 5
       page = 5
     end
-    set_amazon
     retry_count = 0
     begin
       res = Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
@@ -61,7 +60,6 @@ class Item < ActiveRecord::Base
   end
 
   def self.search_for_amazon_by_asin(asin)
-    set_amazon
     retry_count = 0
     begin
       res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
@@ -89,13 +87,5 @@ class Item < ActiveRecord::Base
       }
     end
     book
-  end
-
-  def self.set_amazon
-    Amazon::Ecs.options = {
-      :associate_tag      => ENV['AMAZON_ASSOCIATE_TAG'],
-      :AWS_access_key_id  => ENV['AWS_ACCESS_KEY_ID'],
-      :AWS_secret_key     => ENV['AWS_SECRET_KEY']
-    }
   end
 end
