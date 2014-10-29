@@ -46,6 +46,7 @@ class ItemsController < ApplicationController
 
   def set_book
     asin =  params[:asin] ? params[:asin] : @item.asin
+    @item ||= Item.find_by_asin(asin)
     @book = Item.search_for_amazon_by_asin(asin)
   end
 

@@ -14,4 +14,8 @@ module DeviceHelper
     f.input :password, required: true, :wrapper_html => {:class => 'col-lg-6'},
       :input_html => {:size => 20, :class => 'form-control', :placeholder => 'パスワード'}
   end
+
+  def rank_to_star
+    
+  end
 end

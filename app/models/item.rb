@@ -15,6 +15,18 @@ class Item < ActiveRecord::Base
     self.where({:status => status}).order('created_at desc')
   end
 
+  def resistered_count
+    Item.where(asin: self.asin).count
+  end
+
+  def has_rank?
+    true
+  end
+
+  def rank
+    0.0
+  end
+
   def self.search_for_amazon(keyword, page = 1)
     if page > 5
       page = 5
@@ -52,8 +64,8 @@ class Item < ActiveRecord::Base
   end
 
   def self.search_for_amazon_by_asin(asin)
-    retryable(tries: 5) do
-      res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
+    res = retryable(tries: 5) do
+      Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
     end
 
     book = {}
