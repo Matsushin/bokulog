@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   before_action :set_book, only: %i{show edit update}
 
   def index
-    @bookshelf = Bookshelf.where(:user_id => current_user.id).first
+    @bookshelf = current_user.bookshelf
     @items = @bookshelf.items.order(created_at: :desc).page(params[:page])
   end
 
