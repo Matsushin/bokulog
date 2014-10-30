@@ -15,21 +15,26 @@ class Item < ActiveRecord::Base
     self.where({:status => status}).order('created_at desc')
   end
 
-  def self.search_for_amazon(bookshelf_id, keyword, page = 1)
+  def resistered_count
+    Item.where(asin: self.asin).count
+  end
+
+  def has_rank?
+    true
+  end
+
+  def rank
+    0.0
+  end
+
+  def self.search_for_amazon(keyword, page = 1)
     if page > 5
       page = 5
     end
-    set_amazon
-    retry_count = 0
-    begin
-      res = Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
+
+    res = retryable(tries: 5) do
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Small, ItemAttributes, Images',
         :item_page => page, :country => 'jp'})
-    rescue
-      if retry_count <= 5
-        retry_count + 1
-        retry
-      end
-      false
     end
 
     data = {
@@ -43,14 +48,12 @@ class Item < ActiveRecord::Base
     res.items.each do |item|
       element = item.get_element('ItemAttributes')
       asin = item.get('ASIN')
-      registered = Item.where({:bookshelf_id => bookshelf_id, :asin => asin}).exists?
       book = {
         :asin             => asin,
         :title            => element.get('Title'),
         :author           => element.get_array('Author').join(', '),
         :publication_date => element.get('PublicationDate'),
         :price            => element.get('ListPrice/FormattedPrice'),
-        :registered       => registered,
         :small_image      => item.get('SmallImage/URL'),
         :medium_image     => item.get('MediumImage/URL'),
       }
@@ -61,16 +64,8 @@ class Item < ActiveRecord::Base
   end
 
   def self.search_for_amazon_by_asin(asin)
-    set_amazon
-    retry_count = 0
-    begin
-      res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
-    rescue
-      if retry_count <= 5
-        retry_count + 1
-        retry
-      end
-      false
+    res = retryable(tries: 5) do
+      Amazon::Ecs.item_lookup(asin, {:response_group => 'Small, ItemAttributes, Images', :country => 'jp'})
     end
 
     book = {}
@@ -89,13 +84,5 @@ class Item < ActiveRecord::Base
       }
     end
     book
-  end
-
-  def self.set_amazon
-    Amazon::Ecs.options = {
-      :associate_tag      => ENV['AMAZON_ASSOCIATE_TAG'],
-      :AWS_access_key_id  => ENV['AWS_ACCESS_KEY_ID'],
-      :AWS_secret_key     => ENV['AWS_SECRET_KEY']
-    }
   end
 end

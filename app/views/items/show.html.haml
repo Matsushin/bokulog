@@ -7,12 +7,11 @@
       = image_tag @book[:image]
     .col-lg-6
       %h4
-        %strong #{Item.where({:asin => @book[:asin]}).count}
+        %strong= @item.resistered_count
         人登録
-      - rank_list = Item.where({:asin => @book[:asin]}).pluck(:rank)
-      - unless rank_list.empty?
+      - unless @item.has_rank?
         %h4
-          %strong #{(rank_list.inject{|sum, n| sum + n} / rank_list.size.to_f).round(2)}
+          %strong= @item.rank
           評価
       %h4
         - reviews = Review.find_reviews_by_asin(@book[:asin])
@@ -23,12 +22,14 @@
       = link_to 'Amazon詳細ページへ', @book[:page_url], :class => 'btn btn-primary'
       %br
       %br
+
 .row
   .col-lg-12
     .page-header
       %h2 レビュー
     .review
       - reviews.each do |review|
+        - user = review.item.user # better
         - user = Bookshelf.find_user_by_id(review.item.bookshelf_id)
         .row
           .col-lg-1
@@ -42,11 +43,7 @@
                 #{user.username}さんのレビュー
                 - if review.item.rank > 0
                   .rank-icon
-                    - 5.times do |index|
-                      - if index < review.item.rank
-                        %i.fa.fa-star.orange
-                      - else
-                        %i.fa.fa-star-o
+                    = rank_to_star(review.item.rank)
               .panel-body
                 = review.body
                 %br

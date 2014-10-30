@@ -8,12 +8,12 @@
             %td
               %h4= link_to book[:title], item_path(book[:asin])
               #{book[:author]} / #{book[:publication_date]} / #{book[:price]}
-          %tr.active
+          %tr.active{id: "book_#{book[:asin]}"}
             %td
               .col-lg-3
                 = image_tag book[:medium_image]
               .col-lg-6
-                - if !book[:registered]
+                - unless Item.where(:bookshelf_id => @bookshelf.id, :asin => book[:asin]).exists?
                   .regist-btn
                     = form_tag(bookshelf_items_path, {data: {remote: true}, :class => 'result-form'}) do
                       = hidden_field :book, :asin, :value => book[:asin]
