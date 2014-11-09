@@ -2,24 +2,25 @@
   .col-lg-12
     .page-header
       %h3 本の詳細
-    %h2= @book[:title]
+    %h2= @book.title
     .col-lg-5
-      = image_tag @book[:image]
+      = image_tag @book.image
     .col-lg-6
-      %h4
-        %strong= @item.resistered_count
-        人登録
-      - unless @item.has_rank?
+      - if @book.present?
         %h4
-          %strong= @item.rank
-          評価
-      %h4
-        - reviews = Review.find_reviews_by_asin(@book[:asin])
-        %strong #{reviews.count}
-        レビュー
-      %p 著者:#{@book[:author]}
-      %p #{@book[:price]} / #{@book[:manufacturer]} / #{@book[:publication_date]}発売
-      = link_to 'Amazon詳細ページへ', @book[:page_url], :class => 'btn btn-primary'
+          %strong= @book.resistered_count
+          人登録
+        - if @book.has_rank?
+          %h4
+            %strong= @book.rank
+            評価
+        %h4
+          - reviews = @book.reviews
+          %strong #{reviews.count}
+          レビュー
+      %p 著者:#{@book.author}
+      %p #{@book.price} / #{@book.manufacturer} / #{@book.publicated_at}発売
+      = link_to 'Amazon詳細ページへ', 'http://www.amazon.co.jp/dp/' + @book.asin, :class => 'btn btn-primary'
       %br
       %br
 
@@ -28,23 +29,23 @@
     .page-header
       %h2 レビュー
     .review
-      - reviews.each do |review|
-        - user = review.item.user # better
-        - user = Bookshelf.find_user_by_id(review.item.bookshelf_id)
-        .row
-          .col-lg-1
-            - unless user.icon.blank?
-              = image_tag user.icon, size: '80'
-            - else
-              = image_tag 'prof_noimage_upload.gif', size: '80'
-          .col-lg-8
-            .panel.panel-default
-              .panel-heading
-                #{user.username}さんのレビュー
-                - if review.item.rank > 0
-                  .rank-icon
-                    = rank_to_star(review.item.rank)
-              .panel-body
-                = review.body
-                %br
-                %p.date.text-muted= review.created_at.strftime("%Y年%m月%d日 %H時%M分%S秒")
+      - if reviews.present?
+        - reviews.each do |item|
+          - user = item.user
+          .row
+            .col-lg-1
+              - unless user.icon.blank?
+                = image_tag user.icon, size: '80'
+              - else
+                = image_tag 'prof_noimage_upload.gif', size: '80'
+            .col-lg-8
+              .panel.panel-default
+                .panel-heading
+                  #{user.username}さんのレビュー
+                  - if item.rank > 0
+                    .rank-icon
+                      = rank_to_star(item.rank)
+                .panel-body
+                  = item.review
+                  %br
+                  %p.date.text-muted= item.created_at.strftime("%Y年%m月%d日 %H時%M分%S秒")

@@ -15,7 +15,4 @@ module DeviceHelper
       :input_html => {:size => 20, :class => 'form-control', :placeholder => 'パスワード'}
   end
 
-  def rank_to_star
-    
-  end
 end

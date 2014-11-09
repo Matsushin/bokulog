@@ -1,15 +1,14 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: %i{index search show create edit update}
   before_action :set_item, only: %i{edit update}
-  before_action :set_book, only: %i{show edit update}
-  before_action :set_bookshelf, only: %i{index search create}
+  before_action :set_book, only: %i{show}
 
   def index
-    @items = @bookshelf.items.order(created_at: :desc).page(params[:page])
+    @items = current_user.items.order(created_at: :desc).page(params[:page])
   end
 
   def search
-    @data = Item.search_for_amazon(params[:keyword], params[:page] ? params[:page].to_i : 1)
+    @data = Book.search_for_amazon(params[:keyword], params[:page] ? params[:page].to_i : 1)
     @keyword = params[:keyword]
   end
 
@@ -17,8 +16,9 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @book = @bookshelf.items.build(book_paramas)
-    @book.save!
+    @book = Book.find_or_create_by(book_paramas)
+    @item = current_user.items.build({user_id: current_user.id, book_id: @book.id})
+    @item.save!
 
     respond_to do |format|
       format.js
@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
   def update
     if (@item.update(item_params))
       flash.notice = '更新しました'
-      redirect_to bookshelf_items_path
+      redirect_to user_items_path
     else
       flash.now.alert = '更新に失敗しました'
       render :edit
@@ -45,21 +45,15 @@ class ItemsController < ApplicationController
   end
 
   def set_book
-    asin =  params[:asin] ? params[:asin] : @item.asin
-    @item ||= Item.find_by_asin(asin)
-    @book = Item.search_for_amazon_by_asin(asin)
-  end
-
-  def set_bookshelf
-    @bookshelf = current_user.bookshelf
+    @book = Book.find_or_create_by_asin(params[:asin])
   end
 
   def item_params
     params.require(:item).permit(:status, :rank, :category_id,
-      review_attributes: [:id, :body], tags_attributes: [:id, :name])
+      :review, tags_attributes: [:id, :name])
   end
 
   def book_paramas
-    params.require(:book).permit(:asin, :image)
+    params.require(:book).permit(:asin, :title, :author, :price, :publicated_at, :manufacturer, :image)
   end
 end

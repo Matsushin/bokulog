@@ -2,10 +2,10 @@
   = content_tag(:div, flash.alert, class: 'alert alert-danger') if flash.alert
   .page-header
     %h2 登録情報の編集
-  .col-lg-1
-    = image_tag @item.image
-  .col-lg-8
-    %p= link_to @book[:title], item_path(@book[:asin])
-    %p= @book[:author]
+  .col-lg-2
+    = image_tag medium_book_image(@item.book.image)
+  .col-lg-7
+    %p= link_to @item.book.title, item_path(@item.book.asin)
+    %p= @item.book.author
 %br
 = render 'items/form'

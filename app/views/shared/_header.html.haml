@@ -6,7 +6,7 @@
       %ul.nav.navbar-nav
         - if user_signed_in?
           %li= link_to 'マイページ', user_path(current_user)
-          %li= link_to '本棚', bookshelf_items_path
+          %li= link_to '本棚', user_items_path(current_user)
           %li= #link_to '設定', edit_user_registration_path
           %li= link_to 'ログアウト', destroy_user_session_path, method: :delete
         - else

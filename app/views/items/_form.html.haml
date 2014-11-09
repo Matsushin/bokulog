@@ -1,6 +1,6 @@
 .row
   .well
-    = simple_form_for @item, url: bookshelf_item_path , html: {class: 'form-horizontal'} do |f|
+    = simple_form_for @item, url: user_item_path , html: {class: 'form-horizontal'} do |f|
       .form-group
         = f.input :status, collection: Item.status_lists, include_blank: false,
             wrapper_html: { class: 'col-lg-4'}, input_html: {class: 'form-control'}, label: '読書状況'
@@ -14,10 +14,8 @@
             wrapper_html: { class: 'col-lg-4'}, input_html: {class: 'form-control'}, label: 'カテゴリ'
 
       .form-group
-        - @item.build_review if @item.review.nil?
-        = f.fields_for :review do |review_field|
-          = review_field.input :body, as: :text, required: false,
-              wrapper_html: { class: 'col-lg-6'}, input_html: {class: 'form-control', cols:60, rows:5}, label: 'レビュー'
+        = f.input :review, as: :text, required: false,
+            wrapper_html: { class: 'col-lg-6'}, input_html: {class: 'form-control', cols:60, rows:5}, label: 'レビュー'
 
       .form-group
         - (5 - @item.tags.length).times {@item.tags.build}

@@ -21,12 +21,8 @@
             .item-wrapper
               .item-area
                 .item-img-area
-                  = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+                  = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
               - if item.rank > 0
                 .rank-icon
-                  - 5.times do |index|
-                    - if index < item.rank
-                      %i.fa.fa-star.orange
-                    - else
-                      %i.fa.fa-star-o
+                  = rank_to_star(item.rank)
       = paginate @items

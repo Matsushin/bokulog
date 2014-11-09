@@ -1,9 +1,11 @@
+- books = set_books(@data)
+- @pager_data = set_pager(@data)
 .row
   .col-lg-8
     %h2 "#{@keyword}"での検索結果一覧
     %table.table
       %tbody
-        - @data[:books].each do |book|
+        - books.each do |book|
           %tr
             %td
               %h4= link_to book[:title], item_path(book[:asin])
@@ -13,11 +15,16 @@
               .col-lg-3
                 = image_tag book[:medium_image]
               .col-lg-6
-                - unless Item.where(:bookshelf_id => @bookshelf.id, :asin => book[:asin]).exists?
+                - unless Item.joins(:book).where(:user_id => current_user.id, 'books.asin' => book[:asin]).exists?
                   .regist-btn
-                    = form_tag(bookshelf_items_path, {data: {remote: true}, :class => 'result-form'}) do
+                    = form_tag(user_items_path(current_user), {data: {remote: true}, :class => 'result-form'}) do
                       = hidden_field :book, :asin, :value => book[:asin]
-                      = hidden_field :book, :image, :value => book[:small_image]
+                      = hidden_field :book, :title, :value => book[:title]
+                      = hidden_field :book, :author, :value => book[:author]
+                      = hidden_field :book, :price, :value => book[:price]
+                      = hidden_field :book, :manufacturer, :value => book[:manufacturer]
+                      = hidden_field :book, :publicated_at, :value => book[:publication_date]
+                      = hidden_field :book, :image, :value => book[:image]
                       = submit_tag 'Save', class: 'btn btn-primary'
                 - else
                   本棚に登録済み

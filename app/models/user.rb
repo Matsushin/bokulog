@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  has_one :bookshelf
+  has_many :items
+  has_many :books, through: :items
   validates :username, :email, :encrypted_password, presence: true
   validates :username, :email, :uid, uniqueness: true
 

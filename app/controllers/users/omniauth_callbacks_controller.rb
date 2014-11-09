@@ -24,9 +24,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"].extra("extra")
     unless current_user
       if @user.persisted?
-        if @user.bookshelf.nil?
-          @user.build_bookshelf.save
-        end
         set_flash_message(:notice, :success, :kind => auth.provider) if is_navigational_format?
         sign_in_and_redirect @user, :event => :authentication
       else
@@ -37,6 +34,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def after_sign_in_path_for(resource_or_scope)
-    users_path
+    user_path(current_user)
   end
 end

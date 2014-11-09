@@ -11,48 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929141118) do
+ActiveRecord::Schema.define(version: 20141031040013) do
 
-  create_table "bookshelves", force: true do |t|
-    t.integer  "user_id"
-    t.string   "name"
-    t.string   "introduction"
+  create_table "books", force: true do |t|
+    t.string   "asin",          default: "", null: false
+    t.string   "title"
+    t.string   "author"
+    t.string   "price"
+    t.string   "manufacturer"
+    t.string   "image"
+    t.date     "publicated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "bookshelves", ["user_id"], name: "index_bookshelves_on_user_id", using: :btree
-
-  create_table "categories", force: true do |t|
-    t.integer  "item_id"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "categories", ["item_id"], name: "index_categories_on_item_id", using: :btree
+  add_index "books", ["asin"], name: "index_books_on_asin", unique: true, using: :btree
 
   create_table "items", force: true do |t|
-    t.string   "asin"
-    t.integer  "bookshelf_id"
-    t.integer  "category_id",  default: 0, null: false
-    t.string   "image"
-    t.integer  "rank",         default: 0, null: false
-    t.integer  "status",       default: 0, null: false
+    t.integer  "user_id"
+    t.integer  "category_id", default: 0, null: false
+    t.integer  "rank",        default: 0, null: false
+    t.integer  "status",      default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "book_id"
+    t.string   "review"
   end
 
-  add_index "items", ["bookshelf_id"], name: "index_items_on_bookshelf_id", using: :btree
-
-  create_table "reviews", force: true do |t|
-    t.integer  "item_id"
-    t.string   "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "reviews", ["item_id"], name: "index_reviews_on_item_id", using: :btree
+  add_index "items", ["user_id"], name: "index_items_on_user_id", using: :btree
 
   create_table "tags", force: true do |t|
     t.integer  "item_id"

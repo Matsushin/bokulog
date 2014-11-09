@@ -4,11 +4,11 @@
   %ul.list-group
     %li.list-group-item
       登録アイテム数
-      - saved_count = current_user.bookshelf.items.count
+      - saved_count = current_user.items.count
       %span.badge= saved_count
     %li.list-group-item
       レビュー数
-      - reviewed_count = current_user.bookshelf.items.joins(:review).where("reviews.body <> ''").count
+      - reviewed_count = current_user.items.where("review <> ''").count
       %span.badge= reviewed_count
     %li.list-group-item
       未レビュー数

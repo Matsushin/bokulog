@@ -3,7 +3,7 @@
     読書状況
 .col-lg-6
   .panel.panel-primary
-    - want_to_read_items = current_user.bookshelf.items.find_by_status(1)
+    - want_to_read_items = current_user.items.find_by_status(1)
     .panel-heading
       %h3.panel-title
         読みたい
@@ -11,9 +11,9 @@
           [全#{want_to_read_items.count}件]
     .panel-body
       - want_to_read_items.first(5).each do |item|
-        = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+        = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
   .panel.panel-primary
-    - readed_items = current_user.bookshelf.items.find_by_status(3)
+    - readed_items = current_user.items.find_by_status(3)
     .panel-heading
       %h3.panel-title
         読み終わった
@@ -21,9 +21,9 @@
           [全#{readed_items.count}件]
     .panel-body
       - readed_items.first(5).each do |item|
-        = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+        = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
   .panel.panel-primary
-    - no_status_items = current_user.bookshelf.items.find_by_status(0)
+    - no_status_items = current_user.items.find_by_status(0)
     .panel-heading
       %h3.panel-title
         指定なし
@@ -31,10 +31,10 @@
           [全#{no_status_items.count}件]
     .panel-body
       - no_status_items.first(5).each do |item|
-        = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+        = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
 .col-lg-6
   .panel.panel-primary
-    - reading_items = current_user.bookshelf.items.find_by_status(2)
+    - reading_items = current_user.items.find_by_status(2)
     .panel-heading
       %h3.panel-title
         今読んでる
@@ -42,9 +42,9 @@
           [全#{reading_items.count}件]
     .panel-body
       - reading_items.first(5).each do |item|
-        = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+        = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
   .panel.panel-primary
-    - stockpiled_items = current_user.bookshelf.items.find_by_status(4)
+    - stockpiled_items = current_user.items.find_by_status(4)
     .panel-heading
       %h3.panel-title
         積読
@@ -52,4 +52,4 @@
           [全#{stockpiled_items.count}件]
     .panel-body
       - stockpiled_items.first(5).each do |item|
-        = link_to image_tag(item.image), edit_bookshelf_item_path(item)
+        = link_to image_tag(small_book_image(item.book.image)), edit_user_item_path(current_user, item)
