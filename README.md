@@ -60,9 +60,8 @@ AWS_SECRET_KEY          = '[取得したSecret Access Key]'
 
 ## テーブル構成
 - Users
-- Bookshelves
 - Items
-- Reviews
+- Books
 - Tags 
 
 
