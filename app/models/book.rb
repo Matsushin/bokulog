@@ -9,7 +9,7 @@ class Book < ActiveRecord::Base
     self.items.where('review <> ""').order('created_at desc')
   end
 
-  def resistered_count
+  def registered_count
     self.items.count
   end
 
@@ -19,7 +19,7 @@ class Book < ActiveRecord::Base
 
   def rank
     rank_list = self.items.where('rank <> 0').pluck(:rank)
-    (rank_list.inject{|sum, n| sum + n} / rank_list.size.to_f).round(2)
+    (rank_list.inject{|sum, n| sum + n} / rank_list.size.to_f).round(2)  if rank_list.present?
   end
 
   def self.search_for_amazon(keyword, page = 1)
