@@ -4,7 +4,6 @@ feature 'Authentication' do
   include FeaturesSpecHelper
   before(:all) do
     create(:user)
-    create(:bookshelf)
   end
 
   scenario 'sign up with error' do
@@ -58,12 +57,11 @@ feature 'Authentication' do
     end
 
     expect(page).to have_css('div.alert-success')
-    expect(current_path).to eq users_path
+    expect(current_path).to eq user_path(1)
   end
 
   scenario 'sign out' do
     create(:user)
-    create(:bookshelf)
     sign_in_as_user(User.order(:id).last, 'testtest')
     click_link 'ログアウト'
     expect(page).to have_css('div.alert-success')

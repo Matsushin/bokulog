@@ -1,9 +1,10 @@
 FactoryGirl.define do
   factory :item do
     sequence(:id)
-    asin 'test'
-    sequence(:bookshelf_id)
+    sequence(:rank)
     status 1
-    sequence(:image) { |n| "image_#{n}.jpg" }
+    sequence(:user_id)
+    book_id 1
+    sequence(:review) { |n| n.odd? ? "レビュー#{n}" : "" }
   end
 end

@@ -4,8 +4,6 @@ feature 'Items' do
   include FeaturesSpecHelper
   before(:each) do
     create(:user)
-    create(:bookshelf)
-    create(:review)
     sign_in_as_user(User.order(:id).last, 'testtest')
   end
 
